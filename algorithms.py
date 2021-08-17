@@ -173,6 +173,7 @@ class AStarPathing(PatherTemplate):
             current = self.get_best_cell()
             self.open.remove(current)
             self.closed.add(current)
+
             sleep(self.algorithm_speed)
             if current == self.end:
                 found = True

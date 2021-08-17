@@ -10,11 +10,15 @@ class Window:
         pygame.init()
 
         self.screen = pygame.display.set_mode(config.window_resolution.xy)
+
+        # converting surface to improve performance
+        config.widgets.reset_button.convert()
+
         self.clock = pygame.time.Clock()
         self.grid = grid.Grid(self)
         self.running_algorithm = False
 
-        pygame.display.set_caption("dipaly")
+        pygame.display.set_caption("Pathfinding")
 
     def run(self):
         while True:

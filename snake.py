@@ -50,7 +50,7 @@ class Snake:
         self.path = new_path
 
     def set_direction(self, direction):
-        if self.direction != list(map(lambda d: d * -1, self.direction)):  # checks to see if the new direction is not opposite the old direction (troll)
+        if self.direction != [i*-1 for i in direction]:  # checks to see if the new direction is not opposite the old direction (troll)
             self.direction = direction
 
     def has_died(self):
