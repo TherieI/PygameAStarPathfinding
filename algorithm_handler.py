@@ -7,6 +7,7 @@ from algorithms import BreadthFirstSearch, DijkstraUniformCostSearch, AStarPathi
 from snake import Snake, RunSnakeAI
 from cells import Contents
 from numpy import ndindex as np_iter
+from config import settings
 
 
 class AlgorithmHandler(Window):
@@ -39,7 +40,8 @@ class AlgorithmHandler(Window):
         mouse_pos = pyg_get_pos()
 
         if event.type == KEYDOWN:
-            if event.key == K_SPACE:
+            if event.key == K_SPACE and not settings.running_algorithm:
+                settings.running_algorithm = True
                 self.grid.empty_path()
                 self.breadth.reset(self.grid, *self.grid.fixed_cells)
                 algorithm = Thread(target=self.breadth.run, daemon=True)
@@ -48,7 +50,8 @@ class AlgorithmHandler(Window):
             elif event.key == K_s:
                 algorithm = Thread(target=self.jabsnake.run, daemon=True)
                 algorithm.start()
-            elif event.key == K_a:
+            elif event.key == K_a and not settings.running_algorithm:
+                settings.running_algorithm = True
                 self.grid.empty_path()
                 self.astar.reset(self.grid, *self.grid.fixed_cells)
                 algorithm = Thread(target=self.astar.run, daemon=True)

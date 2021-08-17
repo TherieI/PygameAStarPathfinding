@@ -10,9 +10,10 @@ class Dimensions:
 @dataclass
 class Settings:
     grid_buffer: int
-    neighbor_type: bool # true: 8 diagonal adjacent / false: 4 adjacent per cell
+    neighbor_type: bool # true: 4 diagonal adjacent / false: 8 adjacent per cell
     field_cell_weight: float
     algorithm_speed: float
+    running_algorithm: bool = False
 
 
 class Widgets:
@@ -31,4 +32,4 @@ window_resolution = Dimensions(WINDOW_RESOLUTION_X, WINDOW_RESOLUTION_Y + GRID_B
 grid_dimensions = Dimensions(GRID_DIMENSION_X, GRID_DIMENSION_Y)
 
 widgets = Widgets()
-settings = Settings(GRID_BUFFER, False, 1.5)
+settings = Settings(GRID_BUFFER, True, 1.5, 0.01)

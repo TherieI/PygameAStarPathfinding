@@ -2,7 +2,7 @@ from cells import Contents
 from grid import Grid
 from queue import Queue, PriorityQueue
 from time import sleep
-import config
+from config import settings
 
 class PriorityQueueRefactored(PriorityQueue):  # for dijkstras
     def __init__(self):
@@ -23,11 +23,6 @@ class PatherTemplate:
         self.grid = grid
         self.start = start
         self.end = end
-
-        self.algorithm_speed = 0
-
-    def set_speed(self, speed):
-        self.algorithm_speed = speed
 
     def neighbors(self, cell, cardinal_only=True):
         all_neighbors = list(filter(None.__ne__, [  # filters out all neighbors that are out of map bounds
@@ -86,12 +81,12 @@ class BreadthFirstSearch(PatherTemplate):
     def get_all_paths(self, visual_scan=True):
         found = False
         while not self.frontier.empty():
-            sleep(self.algorithm_speed)
+            sleep(settings.algorithm_speed)
             current = self.frontier.get()
             if current == self.end:
                 found = True
                 break
-            for cell in self.neighbors(current, cardinal_only=config.settings.neighbor_type):
+            for cell in self.neighbors(current, cardinal_only=settings.neighbor_type):
                 if visual_scan and not cell.is_fixed():
                     cell.cont = Contents.SCANNED
                 if cell not in self.came_from:
@@ -108,6 +103,7 @@ class BreadthFirstSearch(PatherTemplate):
             return
         path = self.get_best_path(paths)
         self.draw_path(path)
+        settings.running_algorithm = False
 
 
 class DijkstraUniformCostSearch(PatherTemplate):
@@ -174,12 +170,12 @@ class AStarPathing(PatherTemplate):
             self.open.remove(current)
             self.closed.add(current)
 
-            sleep(self.algorithm_speed)
+            sleep(settings.algorithm_speed)
             if current == self.end:
                 found = True
                 break
 
-            for neighbor_cell in self.neighbors(current, cardinal_only=True):
+            for neighbor_cell in self.neighbors(current, cardinal_only=settings.neighbor_type):
                 if neighbor_cell not in self.closed:
                     if not neighbor_cell.is_fixed() and not neighbor_cell.is_field():
                         neighbor_cell.cont = Contents.SCANNED
@@ -197,6 +193,7 @@ class AStarPathing(PatherTemplate):
             return
         path = self.get_best_path(self.directions)
         self.draw_path(path)
+        settings.running_algorithm = False
 
     def g_cost(self, cell):
         return Grid.dist_between(self.start, cell)
