@@ -3,6 +3,7 @@ import cells, config, grid
 import pygame
 import sys
 import numpy as np
+import button
 
 # displays grid
 class Window:
@@ -10,15 +11,12 @@ class Window:
         pygame.init()
 
         self.screen = pygame.display.set_mode(config.window_resolution.xy)
-
-        # converting surface to improve performance
-        config.widgets.reset_button.convert()
+        pygame.display.set_caption("Pathfinding")
 
         self.clock = pygame.time.Clock()
         self.grid = grid.Grid(self)
         self.running_algorithm = False
 
-        pygame.display.set_caption("Pathfinding")
 
     def run(self):
         while True:
@@ -32,6 +30,7 @@ class Window:
         if event.type == pygame.QUIT: # you guessed it
             pygame.quit()
             sys.exit()
+        self.handle_button_events(event)
 
     def draw(self):
         # background
@@ -51,3 +50,5 @@ class Window:
     def draw_buttons(self):
         self.screen.blit(config.widgets.reset_button, (3, 3))
 
+    def handle_button_events(self, event):
+        pass

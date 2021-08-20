@@ -1,3 +1,6 @@
 /__pycache__/
 /versions/
 /.idea/
+.replit
+poetry.lock
+pyproject.toml

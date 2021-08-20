@@ -31,5 +31,4 @@ GRID_DIMENSION_Y = 40
 window_resolution = Dimensions(WINDOW_RESOLUTION_X, WINDOW_RESOLUTION_Y + GRID_BUFFER)
 grid_dimensions = Dimensions(GRID_DIMENSION_X, GRID_DIMENSION_Y)
 
-widgets = Widgets()
 settings = Settings(GRID_BUFFER, True, 1.5, 0.01)
