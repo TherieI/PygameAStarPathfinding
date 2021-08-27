@@ -42,7 +42,6 @@ class Palette:
         elif cont == Contents.SNAKE:
             return Palette.SNAKE_GREEN
 
-
 @dataclass(unsafe_hash=True)
 class Cell:
     x: int

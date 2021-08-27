@@ -2,14 +2,22 @@ from dataclasses import dataclass
 from pygame.image import load
 
 class Dimensions:
-    def __init__(self, x, y):
+    def __init__(self, x, y, top_buffer=0, bottom_buffer=0, left_buffer=0, right_buffer=0):
         self.x = x
         self.y = y
         self.xy = x, y
 
+        # Buffers
+        self.top = top_buffer
+        self.bottom = bottom_buffer
+        self.left = left_buffer
+        self.right = right_buffer
+
+    def with_buffer(self):
+        return self.x + self.left + self.right, self.y + self.top + self.bottom
+
 @dataclass
 class Settings:
-    grid_buffer: int
     neighbor_type: bool # true: 4 diagonal adjacent / false: 8 adjacent per cell
     field_cell_weight: float
     algorithm_speed: float
@@ -23,12 +31,19 @@ class Widgets:
 # Window Resolution
 WINDOW_RESOLUTION_X = 800
 WINDOW_RESOLUTION_Y = 800
-GRID_BUFFER = 50  # represents the size of the bar at the top where you can change settings
 
+# Buffers
+GRID_BUFFER_TOP = 80  # represents the size of the bar at the top where you can change settings
+GRID_BUFFER_BOTTOM = 20
+GRID_BUFFER_LEFT = 20
+GRID_BUFFER_RIGHT = 20
+
+
+# Number of rows and columns
 GRID_DIMENSION_X = 40
 GRID_DIMENSION_Y = 40
 
-window_resolution = Dimensions(WINDOW_RESOLUTION_X, WINDOW_RESOLUTION_Y + GRID_BUFFER)
+window_resolution = Dimensions(WINDOW_RESOLUTION_X, WINDOW_RESOLUTION_Y, top_buffer=GRID_BUFFER_TOP, bottom_buffer=GRID_BUFFER_BOTTOM, left_buffer=GRID_BUFFER_LEFT, right_buffer=GRID_BUFFER_RIGHT)
 grid_dimensions = Dimensions(GRID_DIMENSION_X, GRID_DIMENSION_Y)
 
-settings = Settings(GRID_BUFFER, True, 1.5, 0.01)
+settings = Settings(True, 1.5, 0.01)

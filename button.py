@@ -1,32 +1,19 @@
 from config import Widgets, settings
-from pygame.Rect import collidepoint as has_collided
-
-class ButtonManager:
-    def __init__(self, grid):
-        self.grid = grid
-
-        self.reset_button = ResetButton(grid)
 
 class Button:
-    _list = []
     def __init__(self, image):
         # converting surface to improve performance
         self.img = image.convert()
-        self.rect = self.image.get_rect()
-        Button._list.append(self)
+        self.rect = self.img.get_rect()
 
     def draw(self, screen, x, y):
         screen.blit(self.img, (x, y))
 
     def is_clicked(self, mouse_pos):
-        return self.rect.has_collided(mouse_pos)
+        return self.rect.collidepoint(mouse_pos)
 
     def run(self):
         raise NotImplementedError("unpog")
-
-    @staticmethod
-    def get_buttons():
-        return Button._list
 
 
 class ResetButton(Button):
@@ -38,3 +25,22 @@ class ResetButton(Button):
         settings.running_algorithm = False
         self.grid.empty_grid()
         self.grid.gen_fixed_cells()
+
+
+class ButtonManager:
+    def __init__(self, grid):
+        self.grid = grid
+        self.buttons = []
+        self.reset_button = ResetButton(grid)
+
+    def add_button(self, button: Button):
+        self.buttons.append(button)
+
+    def get_clicked(self, mouse_pos):
+        for button in self.buttons:
+            if button.is_clicked(mouse_pos):
+                return button
+
+    def draw_buttons(self):
+        for button in self.buttons:
+            button.draw()

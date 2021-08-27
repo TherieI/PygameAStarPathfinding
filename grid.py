@@ -5,12 +5,11 @@ import numpy as np
 
 # Tiles in an array
 class Grid:
-    def __init__(self, window):
+    def __init__(self):
         # generating empty grid
         self.grid = np.full(config.grid_dimensions.xy, cells.Cell)
         self.init_grid()
         self.shape = self.grid.shape
-        self.window = window
         # generating fixed cells (start, end)
         self.fixed_cells = []
         self.gen_fixed_cells()
@@ -18,16 +17,26 @@ class Grid:
     def init_grid(self): # setting all cells to empty and creating the rects
         rect_width, rect_height = (
             int(config.window_resolution.x/config.grid_dimensions.x),
-            int((config.window_resolution.y - config.settings.grid_buffer)/config.grid_dimensions.y)
+            int(config.window_resolution.y/config.grid_dimensions.y)
         )
 
         for x, y in np.ndindex(self.grid.shape):
             # pygame.rect.Rect((position), (width/length))
             rect = pygame.rect.Rect(
-                (x*rect_width, y*rect_height + config.settings.grid_buffer),
+                (x*rect_width + config.window_resolution.left, y*rect_height + config.window_resolution.top),
                 (rect_width, rect_height)
             )
             self.grid[x, y] = cells.Cell(x, y, cells.Contents.EMPTY, rect)
+
+    def draw(self, screen):
+        for x, y in np.ndindex(self.shape):
+            cell = self.get_cell(x, y)
+            pygame.draw.rect(
+                screen,
+                cells.Palette.get_color(cell.cont),
+                cell.rect,
+                width = 1 if cell.cont == cells.Contents.EMPTY else 0 # border drawing stuff
+            )
 
     def empty_grid(self):
         for x, y in np.ndindex(self.grid.shape):

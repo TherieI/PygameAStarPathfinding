@@ -215,5 +215,3 @@ class AStarPathing(PatherTemplate):
                 min_cell = cell
                 min_cell_val = f_cost
         return min_cell
-
-

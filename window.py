@@ -1,22 +1,27 @@
 # refactored game class
-import cells, config, grid
+import button
+import cells
+import config
+import grid
+import interface
+import numpy as np
 import pygame
 import sys
-import numpy as np
-import button
+
 
 # displays grid
 class Window:
     def __init__(self):
         pygame.init()
 
-        self.screen = pygame.display.set_mode(config.window_resolution.xy)
+        self.screen = pygame.display.set_mode(config.window_resolution.with_buffer())
         pygame.display.set_caption("Pathfinding")
 
         self.clock = pygame.time.Clock()
-        self.grid = grid.Grid(self)
+        self.grid = grid.Grid()
         self.running_algorithm = False
 
+        self.button_manager = button.ButtonManager(self.grid)
 
     def run(self):
         while True:
@@ -34,21 +39,14 @@ class Window:
 
     def draw(self):
         # background
-        self.screen.fill(cells.Palette.LIGHTGREY)
+        interface.fill_background(self.screen)
+        interface.draw_border(self.screen, (config.window_resolution.left, config.window_resolution.top), config.window_resolution.xy, cells.Palette.DARKGREY, cells.Palette.LIGHTGREY) # border around grid
+        interface.draw_border(self.screen, (int(config.window_resolution.x/2)-10, config.window_resolution.top-70), (60, 60), cells.Palette.DARKGREY, cells.Palette.LIGHTGREY)  # border around settings
 
-        # drawing nodes
-        for x, y in np.ndindex(self.grid.shape):
-            cell = self.grid.get_cell(x, y)
-            pygame.draw.rect(
-                self.screen,
-                cells.Palette.get_color(cell.cont),
-                cell.rect,
-                width = 1 if cell.cont == cells.Contents.EMPTY else 0 # border drawing stuff
-            )
-        self.draw_buttons()
+        # drawing grid
+        self.grid.draw(self.screen)
 
-    def draw_buttons(self):
-        self.screen.blit(config.widgets.reset_button, (3, 3))
+        self.button_manager.draw_buttons()
 
     def handle_button_events(self, event):
         pass
